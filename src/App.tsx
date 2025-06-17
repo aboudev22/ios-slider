@@ -1,5 +1,9 @@
-import React from "react";
+import IOSSlider from "./components/IOSSlider";
 
 export default function App() {
-  return <div className="h-screen w-screen bg-neutral-900">App</div>;
+  return (
+    <div className="h-screen w-screen flex justify-center items-center bg-neutral-900">
+      <IOSSlider />
+    </div>
+  );
 }
