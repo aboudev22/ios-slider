@@ -3,39 +3,39 @@ import { Sun } from "lucide-react";
 import { useRef, useState } from "react";
 
 export default function App() {
-  const brigthParams = { min: 0, max: 100 };
-  const refContainer = useRef<HTMLDivElement | null>(null);
-  const [height, setHeight] = useState(5);
+  const brightness = { min: 0, max: 100 };
+  const [height, setHeight] = useState(0);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const handleDrag = (
     _: MouseEvent | TouchEvent | PointerEvent,
     info: { point: { x: number; y: number } }
   ) => {
-    if (!refContainer.current) return;
-    const containerHeight = refContainer.current.clientHeight;
+    if (!containerRef.current) return;
+    const containerHeight = containerRef.current.clientHeight;
     const deltaY =
-      info.point.y - refContainer.current.getBoundingClientRect().top;
+      info.point.y - containerRef.current.getBoundingClientRect().top;
     let newValue = 100 - Math.round((deltaY / containerHeight) * 100);
-    newValue = Math.max(brigthParams.min, Math.min(brigthParams.max, newValue));
+    newValue = Math.max(brightness.min, Math.min(brightness.max, newValue));
     setHeight(newValue);
   };
   return (
-    <div className="w-screen h-screen bg-transparent flex justify-center items-center">
+    <div className="h-screen w-screen bg-transparent flex justify-center items-center">
       <div
-        ref={refContainer}
-        className="relative overflow-hidden w-32 h-56 flex justify-center items-end pb-4 rounded-2xl bg-blue-500/20 border-1 border-blue-500/30"
+        ref={containerRef}
+        className="relative bg-blue-500/20 border-2 w-36 h-52 border-blue-500/40 overflow-hidden rounded-2xl flex justify-center items-end pb-4"
       >
         <motion.div animate={{ rotate: height }} className="z-[4]">
           <Sun className="text-blue-500" />
         </motion.div>
+        <div
+          style={{ height: `${height}%` }}
+          className="absolute z-[3] bg-white left-0 right-0 bottom-0"
+        />
         <motion.div
           drag="y"
           onDrag={handleDrag}
-          dragConstraints={refContainer}
+          dragConstraints={containerRef}
           className="absolute z-[5] top-0 bottom-0 left-0 right-0 cursor-grab active:cursor-grabbing"
-        />
-        <div
-          style={{ height: `${height}%` }}
-          className="absolute z-[3] bottom-0 left-0 right-0 bg-white"
         />
       </div>
     </div>
